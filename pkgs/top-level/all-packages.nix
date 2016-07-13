@@ -3934,6 +3934,8 @@ in
 
   unrar = callPackage ../tools/archivers/unrar { };
 
+  x2goserver = callPackage ../tools/admin/x2goserver { };
+
   xar = callPackage ../tools/compression/xar { };
 
   xarchive = callPackage ../tools/archivers/xarchive { };
