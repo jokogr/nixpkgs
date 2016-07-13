@@ -2469,6 +2469,8 @@ in
 
   man-db = callPackage ../tools/misc/man-db { };
 
+  man2html = callPackage ../tools/text/man2html { };
+
   mawk = callPackage ../tools/text/mawk { };
 
   mbox = callPackage ../tools/security/mbox { };
