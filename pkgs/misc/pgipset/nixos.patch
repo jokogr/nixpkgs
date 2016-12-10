@@ -1,0 +1,31 @@
+diff --git a/ipset-update.sh b/ipset-update.sh
+index a45b389..995c067 100755
+--- a/ipset-update.sh
++++ b/ipset-update.sh
+@@ -41,19 +41,19 @@ importList(){
+   if [ -f $LISTDIR/$1.txt ] || [ -f $LISTDIR/$1.gz ]; then
+ 	echo "Importing $1 blocks..."
+ 	
+-	ipset create -exist $1 hash:net maxelem 4294967295
+-	ipset create -exist $1-TMP hash:net maxelem 4294967295
+-	ipset flush $1-TMP &> /dev/null
++	@ipset@/bin/ipset create -exist $1 hash:net maxelem 4294967295
++	@ipset@/bin/ipset create -exist $1-TMP hash:net maxelem 4294967295
++	@ipset@/bin/ipset flush $1-TMP &> /dev/null
+ 
+ 	#the second param determines if we need to use zcat or not
+ 	if [ $2 = 1 ]; then
+-		zcat $LISTDIR/$1.gz | grep  -v \# | grep -v ^$ | grep -v 127\.0\.0 | pg2ipset - - $1-TMP | ipset restore
++		zcat $LISTDIR/$1.gz | grep  -v \# | grep -v ^$ | grep -v 127\.0\.0 | @out@/bin/pg2ipset - - $1-TMP | @ipset@/bin/ipset restore
+ 	else
+-		awk '!x[$0]++' $LISTDIR/$1.txt | grep  -v \# | grep -v ^$ |  grep -v 127\.0\.0 | sed -e "s/^/add\ \-exist\ $1\-TMP\ /" | ipset restore
++		awk '!x[$0]++' $LISTDIR/$1.txt | grep  -v \# | grep -v ^$ |  grep -v 127\.0\.0 | sed -e "s/^/add\ \-exist\ $1\-TMP\ /" | @ipset@/bin/ipset restore
+ 	fi
+ 	
+-	ipset swap $1 $1-TMP &> /dev/null
+-	ipset destroy $1-TMP &> /dev/null
++	@ipset@/bin/ipset swap $1 $1-TMP &> /dev/null
++	@ipset@/bin/ipset destroy $1-TMP &> /dev/null
+ 	
+ 	# only create if the iptables rules don't already exist
+ 	if ! echo $IPTABLES|grep -q "\-A\ INPUT\ \-m\ set\ \-\-match\-set\ $1\ src\ \-\j\ DROP"; then
