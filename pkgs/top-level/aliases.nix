@@ -290,7 +290,6 @@ mapAliases ({
   scim = sc-im; # added 2016-01-22
   scollector = bosun; # added 2018-04-25
   shared_mime_info = shared-mime-info; # added 2018-02-25
-  skrooge2 = skrooge; # added 2017-02-18
   skype = skypeforlinux; # added 2017-07-27
   slurm-llnl = slurm; # renamed July 2017
   slurm-llnl-full = slurm-full; # renamed July 2017
