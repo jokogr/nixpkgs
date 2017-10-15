@@ -9,4 +9,9 @@
     ];
 
   fonts.fontconfig.enable = false;
+  boot.supportedFilesystems = [ "zfs" ];
+
+  environment.systemPackages = with pkgs; [
+    efitools
+  ];
 }
