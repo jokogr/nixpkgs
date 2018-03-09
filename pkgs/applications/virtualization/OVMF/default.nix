@@ -1,4 +1,4 @@
-{ stdenv, lib, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
+{ stdenv, lib, edk2, nasm, iasl, seabios, openssl ? null, secureBoot ? false }:
 
 let
 
@@ -14,7 +14,9 @@ let
   version = (builtins.parseDrvName edk2.name).version;
 
   src = edk2.src;
-in
+in (
+
+assert secureBoot -> openssl != null;
 
 stdenv.mkDerivation (edk2.setup projectDscPath {
   name = "OVMF-${version}";
@@ -23,8 +25,7 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
 
   outputs = [ "out" "fd" ];
 
-  # TODO: properly include openssl for secureBoot
-  buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
+  buildInputs = [ nasm iasl ];
 
   hardeningDisable = [ "stackprotector" "pic" "fortify" ];
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
     export OUTPUT_FD=$fd
 
     for file in \
-      "${src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg,FatPkg,CryptoPkg,SourceLevelDebugPkg};
+      "${src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg,FatPkg,SourceLevelDebugPkg};
     do
       ln -sv "$file" .
     done
@@ -45,15 +46,20 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
       ln -sv ${src}/EmbeddedPkg .
       ln -sv ${src}/OvmfPkg .
     '' else if seabios != null then ''
-        cp -r ${src}/OvmfPkg .
-        chmod +w OvmfPkg/Csm/Csm16
-        cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
+      cp -r ${src}/OvmfPkg .
+      chmod +w OvmfPkg/Csm/Csm16
+      cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
     '' else ''
-        ln -sv ${src}/OvmfPkg .
+      ln -sv ${src}/OvmfPkg .
     ''}
 
-    ${lib.optionalString secureBoot ''
+    ${if secureBoot then ''
       ln -sv ${src}/SecurityPkg .
+      cp -r ${src}/CryptoPkg .
+      chmod +w CryptoPkg/Library/OpensslLib
+      mkdir -p CryptoPkg/Library/OpensslLib/openssl
+      tar xzf ${openssl.src} -C CryptoPkg/Library/OpensslLib/openssl/ --strip-components=1
+    '' else ''
       ln -sv ${src}/CryptoPkg .
     ''}
   '';
@@ -89,4 +95,4 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
     license = stdenv.lib.licenses.bsd2;
     platforms = ["x86_64-linux" "i686-linux" "aarch64-linux"];
   };
-})
+}))

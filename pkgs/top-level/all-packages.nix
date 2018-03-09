@@ -14463,7 +14463,11 @@ in
 
   OVMF = callPackage ../applications/virtualization/OVMF { seabios = null; openssl = null; };
   OVMF-CSM = OVMF.override { openssl = null; };
-  #WIP: OVMF-secureBoot = OVMF.override { seabios = null; secureBoot = true; };
+  OVMF-secureBoot =  callPackage ../applications/virtualization/OVMF {
+    seabios = null;
+    openssl = openssl_1_1_0;
+    secureBoot = true;
+  };
 
   seabios = callPackage ../applications/virtualization/seabios { };
 
