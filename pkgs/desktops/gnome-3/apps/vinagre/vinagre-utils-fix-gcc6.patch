@@ -1,0 +1,25 @@
+From 435e8d6488e292ef75bf225dea4ff1c920870ddd Mon Sep 17 00:00:00 2001
+From: Arnaud Lefebvre <a.lefebvre@outlook.fr>
+Date: Tue, 21 Mar 2017 20:19:43 +0100
+Subject: [PATCH] vinagre-utils: fix GCC 6 compilation
+
+---
+ vinagre/vinagre-utils.vala | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/vinagre/vinagre-utils.vala b/vinagre/vinagre-utils.vala
+index 2d90cb4..f1f445f 100644
+--- a/vinagre/vinagre-utils.vala
++++ b/vinagre/vinagre-utils.vala
+@@ -113,7 +113,7 @@ namespace Vinagre.Utils {
+ 
+         var auth_label = xml.get_object ("auth_required_label") as Label;
+         // Translators: %s is a protocol, like VNC or SSH
+-        auth_label.label = _("%s authentication is required").printf (protocol);
++        auth_label.label = "%s authentication is required".printf (protocol);
+ 
+         var host_label = xml.get_object ("host_label") as Label;
+         host_label.label = host;
+-- 
+2.12.0
+
