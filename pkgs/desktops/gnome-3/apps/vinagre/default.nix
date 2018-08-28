@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk3, gnome3, vte, libxml2, gtk-vnc, intltool
-, libsecret, itstool, wrapGAppsHook, librsvg }:
+, libsecret, itstool, wrapGAppsHook, librsvg, vala }:
 
 stdenv.mkDerivation rec {
   name = "vinagre-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     ./vinagre-utils-fix-gcc6.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
+  nativeBuildInputs = [ vala pkgconfig intltool itstool wrapGAppsHook ];
   buildInputs = [
     gtk3 vte libxml2 gtk-vnc libsecret gnome3.adwaita-icon-theme librsvg
   ];
