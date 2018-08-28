@@ -1,4 +1,4 @@
-{ stdenv, lib, edk2, nasm, iasl, seabios, openssl ? null, secureBoot ? false }:
+{ stdenv, lib, edk2, nasm, iasl, seabios, openssl ? null, secureBoot ? false, perl }:
 
 let
 
@@ -24,6 +24,8 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
   inherit src;
 
   outputs = [ "out" "fd" ];
+
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [ nasm iasl ];
 
@@ -58,7 +60,13 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
       cp -r ${src}/CryptoPkg .
       chmod +w CryptoPkg/Library/OpensslLib
       mkdir -p CryptoPkg/Library/OpensslLib/openssl
+      chmod +w CryptoPkg/Library/Include/openssl/opensslconf.h
       tar xzf ${openssl.src} -C CryptoPkg/Library/OpensslLib/openssl/ --strip-components=1
+      cd CryptoPkg/Library/OpensslLib
+      patchShebangs openssl/Configure
+      patch -p1 < ${./openssl110i.patch}
+      perl process_files.pl
+      cd ../../..
     '' else ''
       ln -sv ${src}/CryptoPkg .
     ''}

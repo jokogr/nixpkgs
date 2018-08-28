@@ -1,0 +1,13 @@
+--- a/openssl/crypto/asn1/x_int64.c
++++ b/openssl/crypto/asn1/x_int64.c
+@@ -102,8 +102,8 @@
+                         int indent, const ASN1_PCTX *pctx)
+ {
+     if ((it->size & INTxx_FLAG_SIGNED) == INTxx_FLAG_SIGNED)
+-        return BIO_printf(out, "%"BIO_PRI64"d\n", **(int64_t **)pval);
+-    return BIO_printf(out, "%"BIO_PRI64"u\n", **(uint64_t **)pval);
++        return BIO_printf(out, "%lld\n", **(int64_t **)pval);
++    return BIO_printf(out, "%llu\n", **(uint64_t **)pval);
+ }
+ 
+ /* 32-bit variants */
