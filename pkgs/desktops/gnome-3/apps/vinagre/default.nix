@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
     gtk3 vte libxml2 gtk-vnc libsecret gnome3.adwaita-icon-theme librsvg
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "vinagre";
