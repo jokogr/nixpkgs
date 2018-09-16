@@ -14465,7 +14465,7 @@ in
   OVMF-CSM = OVMF.override { openssl = null; };
   OVMF-secureBoot =  callPackage ../applications/virtualization/OVMF {
     seabios = null;
-    openssl = openssl_1_1_0;
+    openssl = openssl_1_1;
     secureBoot = true;
   };
 
