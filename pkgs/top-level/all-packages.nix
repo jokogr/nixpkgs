@@ -14461,11 +14461,10 @@ in
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
-  OVMF = callPackage ../applications/virtualization/OVMF { seabios = null; openssl = null; };
-  OVMF-CSM = OVMF.override { openssl = null; };
+  OVMF = callPackage ../applications/virtualization/OVMF { seabios = null; };
+  OVMF-CSM = OVMF.override { };
   OVMF-secureBoot =  callPackage ../applications/virtualization/OVMF {
     seabios = null;
-    openssl = openssl_1_1;
     secureBoot = true;
   };
 

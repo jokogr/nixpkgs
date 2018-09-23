@@ -1,4 +1,4 @@
-{ stdenv, lib, edk2, nasm, iasl, seabios, openssl ? null, secureBoot ? false, perl }:
+{ stdenv, fetchurl, lib, edk2, nasm, iasl, seabios, secureBoot ? false, perl }:
 
 let
 
@@ -14,14 +14,17 @@ let
   version = (builtins.parseDrvName edk2.name).version;
 
   src = edk2.src;
-in (
 
-assert secureBoot -> openssl != null;
+  opensslSrc = fetchurl {
+    url = "https://www.openssl.org/source/openssl-1.1.0i.tar.gz";
+    sha256 = "16fgaf113p6s5ixw227sycvihh3zx6f6rf0hvjjhxk68m12cigzb";
+  };
+in (
 
 stdenv.mkDerivation (edk2.setup projectDscPath {
   name = "OVMF-${version}";
 
-  inherit src;
+  srcs = [ src ] ++ (lib.optionals secureBoot) [ opensslSrc ];
 
   outputs = [ "out" "fd" ];
 
@@ -60,8 +63,9 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
       cp -r ${src}/CryptoPkg .
       chmod +w CryptoPkg/Library/OpensslLib
       mkdir -p CryptoPkg/Library/OpensslLib/openssl
+      chmod +w CryptoPkg/Library/OpensslLib/openssl
       chmod +w CryptoPkg/Library/Include/openssl/opensslconf.h
-      tar xzf ${openssl.src} -C CryptoPkg/Library/OpensslLib/openssl/ --strip-components=1
+      tar xzf ${opensslSrc} -C CryptoPkg/Library/OpensslLib/openssl/ --strip-components=1
       cd CryptoPkg/Library/OpensslLib
       patchShebangs openssl/Configure
       patch -p1 < ${./openssl110i.patch}
