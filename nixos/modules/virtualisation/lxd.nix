@@ -57,7 +57,7 @@ in
       description = "LXD Container Management Daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
+      after = [ "systemd-udev-settle.service" "apparmor.service" ];
 
       path = lib.optional cfg.zfsSupport pkgs.zfs;
 
