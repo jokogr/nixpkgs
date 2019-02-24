@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, fetchFromGitHub
 , qmake, qtbase, qtquickcontrols, qtsvg
 , python3, pyotherside, ncurses
 , pcsclite, yubikey-personalization
@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
   pname = "yubioath-desktop";
   version = "4.3.4";
 
-  src = fetchurl {
-    url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
-    sha256 = "0hb7j71032sigs8zd5r8yr0m59sjkb24vhs2l4jarpvj8q7hv30d";
+  src = fetchFromGitHub {
+    owner = "Yubico";
+    repo = "yubioath-desktop";
+    rev = "${pname}-${version}";
+    sha256 = "1gk4392rxb5qh72j5rpv7xpyii7vm31slbrvnwwf5vj9phihwqq5";
   };
 
   doCheck = false;
