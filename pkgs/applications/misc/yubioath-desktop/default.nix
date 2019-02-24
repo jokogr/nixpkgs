@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yubioath-desktop";
-  version = "4.3.4";
+  version = "4.3.5";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-desktop";
     rev = "${pname}-${version}";
-    sha256 = "1gk4392rxb5qh72j5rpv7xpyii7vm31slbrvnwwf5vj9phihwqq5";
+    sha256 = "1kmp7s1sgmxzj97j5qy2x2crahzn9pda8mjvssbaarfpzfncbdzg";
   };
 
   doCheck = false;
