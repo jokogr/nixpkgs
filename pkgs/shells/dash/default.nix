@@ -1,10 +1,11 @@
 { stdenv, buildPackages, autoreconfHook, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dash-0.5.11.2";
+  pname = "dash";
+  version = "0.5.11.2";
 
   src = fetchurl {
-    url = "http://gondor.apana.org.au/~herbert/dash/files/${name}.tar.gz";
+    url = "http://gondor.apana.org.au/~herbert/dash/files/${pname}-${version}.tar.gz";
     sha256 = "0pvdpm1cgfbc25ramn4305a0158yq031q1ain4dc972rnxl7vyq0";
   };
 
