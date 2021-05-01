@@ -53,7 +53,7 @@ buildGoPackage rec {
   meta = with lib; {
     homepage = "https://github.com/dmacvicar/terraform-provider-libvirt";
     description = "Terraform provider for libvirt";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = with maintainers; [ mic92 ];
   };
